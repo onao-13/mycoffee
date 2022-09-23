@@ -1,16 +1,17 @@
-package com.example.mycoffee.order;
+package com.example.mycoffee.entities;
 
-import com.example.mycoffee.coffee.Coffee;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
 @Getter
 @Setter
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,24 +20,16 @@ public class Order {
     @Column(name = "buyer_id")
     private Long buyerId;
 
-    @Column(name = "price")
-    private Double price;
-
-    @Column(name = "coffee_order")
-    private List<Coffee> coffeeOrder;
+//    @OneToMany(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "order_id")
+//    private Map<Long, Integer> coffeeOrder;
 
     public Order() {
     }
 
-    public Order(Long buyerId, Double price, List<Coffee> coffeeOrder) {
+    public Order(Long buyerId, Map<Long, Integer> coffeeOrder) {
         this.buyerId = buyerId;
-        this.price = price;
-        this.coffeeOrder = coffeeOrder;
-    }
-
-    public void addToOrder(Coffee coffee) {
-        coffeeOrder.add(coffee);
-        price += coffee.price();
+//        this.coffeeOrder = coffeeOrder;
     }
 
     @Override
