@@ -1,16 +1,18 @@
 package com.example.mycoffee.entities;
 
+import com.example.mycoffee.payment.PaymentType;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Getter
-@Setter
 @Table(name = "orders")
 public class Order {
     @Id
@@ -20,17 +22,18 @@ public class Order {
     @Column(name = "buyer_id")
     private Long buyerId;
 
-//    @OneToMany(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "order_id")
-//    private Map<Long, Integer> coffeeOrder;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "payment_type")
+    private PaymentType paymentType;
 
-    public Order() {
-    }
+    @Embedded
+    @Column(name = "order_info")
+    private OrderInfo orderInfo;
 
-    public Order(Long buyerId, Map<Long, Integer> coffeeOrder) {
-        this.buyerId = buyerId;
-//        this.coffeeOrder = coffeeOrder;
-    }
+
+    @Embedded
+    @Column(name = "product_order")
+    private List<ProductInOrder> productInOrder = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

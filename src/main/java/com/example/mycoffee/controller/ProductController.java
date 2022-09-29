@@ -1,27 +1,26 @@
 package com.example.mycoffee.controller;
 
-import com.example.mycoffee.dto.CoffeeDTO;
-import com.example.mycoffee.entities.Coffee;
-import com.example.mycoffee.service.CoffeeService;
+import com.example.mycoffee.entities.Product;
+import com.example.mycoffee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("/api/products")
 public class ProductController {
     @Autowired
-    private CoffeeService coffeeService;
+    private ProductService productService;
 
-    @PostMapping("/new-coffee")
-    ResponseEntity addNewCoffee(@RequestBody Coffee coffee) {
-        coffeeService.addNewCoffee(coffee);
+    @PostMapping("/new-product")
+    ResponseEntity addNewCoffee(@RequestBody Product product) {
+        productService.addProduct(product);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/coffee/{id}")
-    ResponseEntity getCoffeeById(@PathVariable("id") Long id) {
-        CoffeeDTO coffee = coffeeService.getCoffee(id);
-        return ResponseEntity.ok().body(coffee);
+    @GetMapping("/get-product/")
+    ResponseEntity getProductById(@RequestParam("id") Integer id) {
+        Product product = productService.getProductById(id);
+        return ResponseEntity.ok().body(product);
     }
 }

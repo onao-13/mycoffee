@@ -1,55 +1,52 @@
 package com.example.mycoffee.service.impl;
 
-import com.example.mycoffee.dao.CoffeeDAO;
-import com.example.mycoffee.entities.Coffee;
 import com.example.mycoffee.dao.OrderDAO;
 import com.example.mycoffee.entities.Order;
-import com.example.mycoffee.entities.Purchases;
-import com.example.mycoffee.service.CoffeeService;
+import com.example.mycoffee.entities.OrderInfo;
+import com.example.mycoffee.entities.Product;
+import com.example.mycoffee.entities.ProductInOrder;
 import com.example.mycoffee.service.OrderService;
-import com.example.mycoffee.service.PurchasesService;
-import lombok.extern.slf4j.Slf4j;
+import com.example.mycoffee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
 
-//@Slf4j
 @Service
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderDAO orderDAO;
 
     @Autowired
-    private CoffeeDAO coffeeDAO;
-
-    @Autowired
-    private PurchasesService purchasesService;
-
+    private ProductService productService;
+    
     @Override
     public void buy(Order order) {
-//        Map<Long, Integer> coffees = order.getCoffeeOrder();
-//        Purchases purchases = new Purchases();
-//        Double price = 0.0;
-//
-//        for (Map.Entry<Long, Integer> coffee : coffees.entrySet()) {
-//            for (int i = 0; i <= coffee.getValue(); i++) {
-//                Coffee getCoffee = coffeeDAO.getCoffeeById(coffee.getKey());
-//                price += getCoffee.getPrice();
-////                log.trace("Price: {}", price);
-//                System.out.println(price);
-//            }
-//        }
-//
-//        purchases.setTotalPrice(price);
-//        purchases.setBuyerId(order.getBuyerId());
-//        purchasesService.addPurchases(purchases);
-//        orderDAO.createOrder(order);
+        Double totalPrice = 0.0;
+
+        for(ProductInOrder products : order.getProductInOrder()) {
+            Product product = productService.getProductById(products.getId());
+            int count = products.getCount();
+
+            while(count != 0) {
+                totalPrice += product.getPrice();
+                count--;
+            }
+        }
+
+        order.setOrderInfo(OrderInfo.builder()
+                        .buyerName(null)
+                        .orderDate(LocalDate.now())
+                        .totalPrice(totalPrice)
+                .build()
+        );
+
+
+        orderDAO.createOrder(order);
     }
 
     @Override
-    public Order getOrder(Long orderId) {
-        return orderDAO.getOrder(orderId);
+    public Order getOrderInfo(Long orderId) {
+        return null;
     }
 }
