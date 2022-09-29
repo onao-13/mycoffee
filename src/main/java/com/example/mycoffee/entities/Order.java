@@ -1,16 +1,19 @@
-package com.example.mycoffee.order;
+package com.example.mycoffee.entities;
 
-import com.example.mycoffee.coffee.Coffee;
+import com.example.mycoffee.payment.PaymentType;
 import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Getter
-@Setter
+@Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -19,25 +22,18 @@ public class Order {
     @Column(name = "buyer_id")
     private Long buyerId;
 
-    @Column(name = "price")
-    private Double price;
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "payment_type")
+    private PaymentType paymentType;
 
-    @Column(name = "coffee_order")
-    private List<Coffee> coffeeOrder;
+    @Embedded
+    @Column(name = "order_info")
+    private OrderInfo orderInfo;
 
-    public Order() {
-    }
 
-    public Order(Long buyerId, Double price, List<Coffee> coffeeOrder) {
-        this.buyerId = buyerId;
-        this.price = price;
-        this.coffeeOrder = coffeeOrder;
-    }
-
-    public void addToOrder(Coffee coffee) {
-        coffeeOrder.add(coffee);
-        price += coffee.price();
-    }
+    @Embedded
+    @Column(name = "product_order")
+    private List<ProductInOrder> productInOrder = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
