@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -31,9 +30,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private SearchAccount searchAccount;
-
-//    @Autowired
-//    private ProductOrderService productOrderService;
 
     @Override
     public PaymentResponse buy(OrderRequest request) {
@@ -68,16 +64,6 @@ public class OrderServiceImpl implements OrderService {
         orderDAO.createOrder(order);
 
         log.trace("create new order. Account id: " + request.getBuyerId());
-
-//        order.getOrder().stream().filter(Objects::nonNull).forEach(product ->
-//                productOrderService.addToOrder(
-//                        ProductOrder.builder()
-//                                .orderId(order.getId())
-//                                .productId(product.getId())
-//                                .productCount(product.getCount())
-//                                .build()
-//                )
-//        );
 
         return PaymentResponse.builder().price(totalPrice).build();
     }

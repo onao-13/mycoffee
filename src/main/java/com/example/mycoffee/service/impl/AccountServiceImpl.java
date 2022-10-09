@@ -67,18 +67,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         } else {
             throw new AuthenticationException("Неверный пароль");
         }
-
-//        Authentication authentication;
-//        try {
-//            authentication = authenticationManager.authenticate(
-//                    new UsernamePasswordAuthenticationToken(
-//                            authRequest.getName(), authRequest.getPassword()
-//                    )
-//            );
-//            log.info(authentication.getDetails().toString());
-//        } catch (BadCredentialsException e) {
-//            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "имя или пароль неверны");
-//        }
     }
 
     @Override

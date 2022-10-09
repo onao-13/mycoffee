@@ -11,7 +11,7 @@ import javax.persistence.PersistenceContext;
 
 @Repository
 public class OrderDAOImpl implements OrderDAO {
-    @Autowired
+    @PersistenceContext
     private EntityManager entityManager;
 
     @Override

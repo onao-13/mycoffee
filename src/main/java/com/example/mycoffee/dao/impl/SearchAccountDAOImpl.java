@@ -43,7 +43,7 @@ public class SearchAccountDAOImpl implements SearchAccountDAO {
     @Transactional
     public AccountResponse searchAccountByName(String name) {
         return (AccountResponse) entityManager.createQuery("SELECT a FROM Account a" +
-                        "WHERE a.name = :name") // error: token a
+                        "WHERE a.name = :name")
                 .setParameter("name", name)
                 .getSingleResult();
     }
