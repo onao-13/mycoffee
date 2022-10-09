@@ -1,6 +1,9 @@
 package com.example.mycoffee.entities;
 
+import com.example.mycoffee.entities.dataobject.OrderInfo;
+import com.example.mycoffee.entities.dataobject.ProductInOrder;
 import com.example.mycoffee.payment.PaymentType;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -12,28 +15,37 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
+@ToString(exclude = "order")
 @Table(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
+    @NotNull
     @Column(name = "buyer_id")
-    private Long buyerId;
+    private Integer buyerId;
 
+    @NotNull
     @Enumerated(value = EnumType.STRING)
     @Column(name = "payment_type")
-    private PaymentType paymentType;
+    private PaymentType payment;
 
+    @NotNull
     @Embedded
     @Column(name = "order_info")
-    private OrderInfo orderInfo;
+    private OrderInfo info;
 
+    @NotNull
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<ProductInOrder> order = new ArrayList<>();
 
-    @Embedded
-    @Column(name = "product_order")
-    private List<ProductInOrder> productInOrder = new ArrayList<>();
+    public void addToOrder(ProductInOrder product) {
+        order.add(product);
+        product.setOrder(this);
+    }
 
     @Override
     public boolean equals(Object o) {
